@@ -48,12 +48,10 @@ void drawButton(Button* item){
 	SDL_RenderDebugText(studioRenderer, item->rect.x + 2, item->rect.y + 2, item->labelText);
 }
 
-extern DataType blockClass;
 extern DataObj *focusObject;
-extern DataType playerClass;
 
 void buttonAddObject(Button* item){
-	DataObj *newItem = newObject(focusObject, &blockClass);
+	DataObj *newItem = newObject(focusObject, getClassByName("Block"));
 	newItem->pos = (Vector3){floor(focusObject->pos.x) + 1, floor(focusObject->pos.y) + 1, floor(focusObject->pos.z) + 1};
 	Vector3 normalizedColour = normalize3((Vector3){SDL_randf(), SDL_randf(), SDL_randf()});
 	newItem->colour = (CharColour){normalizedColour.x * 255, normalizedColour.y * 255, normalizedColour.z * 255, 255, 0, COLOURMODE_RGB};
@@ -85,7 +83,7 @@ static void SDLCALL openMapDialogue(void* userdata, const char* const* filelist,
 	client.gameWorld->headObj->child = NULL;
 	loadMapFromSBMap(*filelist);
 	
-	DataObj *playerObj = newObject(NULL, &playerClass);
+	DataObj *playerObj = newObject(NULL,getClassByName("Player"));
 	client.gameWorld->currPlayer = playerObj;
 	
 	if (filter < 0) {

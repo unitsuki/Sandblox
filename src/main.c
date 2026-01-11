@@ -21,6 +21,7 @@
 #include "loader.h"
 #include "map.h"
 
+#include "objects/objects.h"
 #include "studio/studio.h"
 
 SDL_Window *window = NULL;
@@ -72,11 +73,28 @@ void HandleKeyInput();
 
 extern float renderScale;
 
-//insert better mesh initiating system here or somewhere
-extern DataType playerClass;
-extern DataType fuckingBeerdrinkerClass;
-extern DataType blockClass;
-extern DataType meshClass;
+void mapDraw(DataObj* object){
+	drawMesh(object->objMesh, object->transform, (SDL_FColor){1, 1, 1, 1});
+}
+
+DataObj gameHeader = {
+	(Vector3){0, 0, 0},
+	(Vector3){1, 1, 1},
+	(Vector3){0, 0, 0},
+	NULL,
+	(CharColour){0, 0, 0, 255, 0, COLOURMODE_RGB},
+	"Workspace",
+	&(DataType){
+		"Workspace",
+		1,
+		0,
+		NULL,
+		NULL,
+		mapDraw
+	},
+	NULL, NULL, NULL, NULL, NULL, NULL,
+	true,
+};
 
 extern DataObj gameHeader;
 extern DataObj *focusObject;
@@ -159,7 +177,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]){
 	client.gameWorld->currCamera = &currentCamera;
 
 	if (client.gameWorld->currPlayer == NULL) {
-		playerObj = newObject(NULL, &playerClass);
+		playerObj = newObject(NULL, getClassByName("Player"));
 		client.gameWorld->currPlayer = playerObj;
 	}
 	
@@ -167,19 +185,19 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]){
 	
 	if(mapLoaded) return SDL_APP_CONTINUE;
 	
-	DataObj *blockObj = newObject(NULL, &blockClass);
+	DataObj *blockObj = newObject(NULL, getClassByName("Block"));
 	blockObj->scale = (Vector3){8, 1, 8}; blockObj->pos = (Vector3){-4, 0, -4};
 	blockObj->colour = (CharColour){153, 204, 255, 255, 0, COLOURMODE_RGB};
 	
-	DataObj *blockObjA = newObject(NULL, &blockClass); blockObjA->name = "Red Teapot";
+	DataObj *blockObjA = newObject(NULL, getClassByName("Block")); blockObjA->name = "Red Teapot";
 	blockObjA->pos = (Vector3){-4, 2, -4}; blockObjA->scale = (Vector3){0.5, 0.5, 0.5}; blockObjA->colour = (CharColour){255, 0, 0, 128, 0, COLOURMODE_RGB};
-	DataObj *meshObjA = newObject(blockObjA, &meshClass); meshObjA->asVoidptr[OBJVAL_MESH] = teapotMesh;
+	DataObj *meshObjA = newObject(blockObjA, getClassByName("Mesh")); meshObjA->asVoidptr[OBJVAL_MESH] = teapotMesh;
 	
-	DataObj *blockObjB = newObject(NULL, &blockClass); blockObjB->name = "Yellow Sphere";
+	DataObj *blockObjB = newObject(NULL, getClassByName("Block")); blockObjB->name = "Yellow Sphere";
 	blockObjB->pos = (Vector3){4, 2, 4}; blockObjB->scale = (Vector3){2, 2, 2}; blockObjB->colour = (CharColour){255, 255, 0, 255, 0, COLOURMODE_RGB};
-	DataObj *meshObjB = newObject(blockObjB, &meshClass); meshObjB->asVoidptr[OBJVAL_MESH] = spherePrim;
+	DataObj *meshObjB = newObject(blockObjB, getClassByName("Mesh")); meshObjB->asVoidptr[OBJVAL_MESH] = spherePrim;
 	
-	DataObj *homerObj = newObject(NULL, &fuckingBeerdrinkerClass);
+	DataObj *homerObj = newObject(NULL, getClassByName("beer drinker"));
 
 	return SDL_APP_CONTINUE;
 }	

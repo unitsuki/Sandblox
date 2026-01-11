@@ -15,4 +15,7 @@ void cleanupObjects(DataObj* item);
 
 DataObj* firstChildOfType(DataObj* item, DataType classData);
 
+bool addNewClass(DataType *newClass);
+DataType* getClassByName(char* string);
+
 #endif

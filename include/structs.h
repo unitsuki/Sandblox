@@ -20,11 +20,9 @@ typedef enum gameKeybinds{
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
 typedef float mat4[16];
-
 typedef struct{
 	float x, y, z;
 } Vector3;
-
 typedef struct{
 	float x, y, z, w;
 } Vector4;
@@ -32,7 +30,6 @@ typedef struct{
 typedef enum colourModes{
 	COLOURMODE_RGB, COLOURMODE_HSV, COLOURMODE_CMYK, COLOURMODE_OKLAB
 } colourModes;
-
 typedef struct{
 	Uint8 r, g, b, a;
 	float hue;
@@ -40,7 +37,6 @@ typedef struct{
 } CharColour;
 
 typedef struct DataObj DataObj;
-
 typedef struct{
 	char *name;
 	Uint16 id;
@@ -51,14 +47,12 @@ typedef struct{
 	// virgin sm64 geo asm vs chad sandblox per-actor draw function
 	void (*draw)(DataObj*);
 } DataType;
-
 typedef enum objValues{ //array items for the pointers (the void *values)
 	OBJVAL_OTHER, OBJVAL_SCRIPT,
 	OBJVAL_COLLIDER, OBJVAL_VELOCITY,
 	OBJVAL_MESH, OBJVAL_TEXTURE,
 	OBJVAL_MAX, //always put in end
 } objValues;
-
 typedef struct DataObj{
 	Vector3 pos, scale, rot;
 	float *transform;
@@ -98,6 +92,12 @@ typedef struct{
 } GameWorld;
 
 typedef struct{
+	bool debug, pause, studio, online;
+	Uint32 playerID;
+	GameWorld *gameWorld;
+} ClientData;
+
+typedef struct{
 	Uint8 IPv4[4];
 	Uint16 IPv6[8];
 } IPAddress;
@@ -105,15 +105,7 @@ typedef struct{
 typedef struct{
 	IPAddress serverIP, clientIP;
 	float avgPing;
-	
-	//i dont really know how to do server stuff so
-} Server;
-
-typedef struct{
-	bool debug, pause, studio, online;
-	Uint32 playerID;
-	GameWorld *gameWorld;
-} ClientData;
+} Server; //i dont really know how to do server stuff so
 
 typedef struct{
 	bool down, pressed, released, pressCheck;
@@ -121,7 +113,6 @@ typedef struct{
 } ButtonMap;
 
 //collision slop i think
-
 typedef enum CollisionHullShapes{
 	COLLHULL_POINT,
 	COLLHULL_SPHERE,
@@ -129,14 +120,11 @@ typedef enum CollisionHullShapes{
 	COLLHULL_CYLINDER,
 	COLLHULL_FUNCTION,
 } CollisionHullShapes;
-
 typedef struct{
 	Uint32 shape;
 	Vector3 pos, rot, scale;
-	
 	void (*funkyCollision)(void); //custom collision function for COLLHULL_FUNCTION
 } CollisionHull;
-
 typedef struct{
 	Vector3 outNorm;
 } CollsionReturn;

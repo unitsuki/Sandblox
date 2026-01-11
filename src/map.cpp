@@ -22,7 +22,7 @@ extern ClientData client;
 }
 
 std::map<std::string, DataType*> nameToClass = {
-    { "blockClass", &blockClass },
+    { "blockClass", getClassByName("Block") },
 };
 
 std::string getDirFromFile(std::string path) {
@@ -48,7 +48,7 @@ LINK_WITH_C void loadMapFromSBMap(const char *path) {
         } else if (strncmp(line, "startpos", 8) == 0) {
             float x,y,z;
             sscanf(line, "startpos %f, %f, %f", &x,&y,&z);
-            playerObj = newObject(NULL, &playerClass);
+            playerObj = newObject(NULL, getClassByName("Player"));
             playerObj->pos.x = x;
             playerObj->pos.y = y;
             playerObj->pos.z = z;
